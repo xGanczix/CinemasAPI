@@ -4,6 +4,7 @@ namespace CinemasAPI.Models
 {
     public class CinemaClient
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public bool IsOpen { get; set; }
         public string ContactEmail { get; set; }

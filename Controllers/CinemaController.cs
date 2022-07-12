@@ -18,6 +18,36 @@ namespace CinemasAPI.Controllers
             _cinemaService = cinemaService;
         }
 
+        [HttpPut("{id}")]
+        public ActionResult Update([FromBody] UpdateCinemaClient client, [FromRoute] int id)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var isUpdated = _cinemaService.Update(id, client);
+            if(!isUpdated)
+            {
+                return NotFound();
+            }
+
+            return  Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            var isDeleted = _cinemaService.Delete(id);
+
+            if(isDeleted)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
+
         [HttpPost]
         public ActionResult CreateCinema([FromBody] CreateCinemaClient client)
         {

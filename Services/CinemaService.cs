@@ -12,6 +12,8 @@ namespace CinemasAPI.Services
         CinemaClient GetById(int id);
         IEnumerable<CinemaClient> GetAll();
         int Create(CreateCinemaClient client);
+        bool Delete(int id);
+        bool Update(int id, UpdateCinemaClient client);
     }
 
     public class CinemaService : ICinemaService
@@ -23,7 +25,7 @@ namespace CinemasAPI.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
-
+        
         public CinemaClient GetById(int id)
         {
             var cinemas = _dbContext
@@ -61,6 +63,43 @@ namespace CinemasAPI.Services
             _dbContext.SaveChanges();
 
             return cinema.Id;
+        }
+
+        public bool Delete(int id)
+        {
+            var cinemas = _dbContext
+                .Cinemas
+                .FirstOrDefault(c => c.Id == id);
+
+            if(cinemas is null)
+            {
+                return false;
+            }
+
+            _dbContext.Cinemas.Remove(cinemas);
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public bool Update(int id, UpdateCinemaClient client)
+        {
+            var cinemas = _dbContext
+                .Cinemas
+                .FirstOrDefault(c => c.Id ==id);
+
+            if(cinemas is null)
+            {
+                return false;
+            }
+
+            cinemas.Name = client.Name;
+            cinemas.IsOpen  = client.IsOpen;
+            cinemas.ContactEmail = client.ContactEmail;
+
+            _dbContext.SaveChanges();
+
+            return true;
         }
     }
 }
