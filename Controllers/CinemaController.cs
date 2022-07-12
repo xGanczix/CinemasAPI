@@ -1,4 +1,6 @@
-﻿using CinemasAPI.Entities;
+﻿using AutoMapper;
+using CinemasAPI.Entities;
+using CinemasAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +11,23 @@ namespace CinemasAPI.Controllers
     public class CinemaController : ControllerBase
     {
         private readonly CinemaDbContext _dbContext;
-        public CinemaController(CinemaDbContext dbContext)
+        private readonly IMapper _mapper;
+        public CinemaController(CinemaDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Cinema>> GetAll()
+        public ActionResult<IEnumerable<CinemaClient>> GetAll()
         {
             var cinemas = _dbContext
                 .Cinemas
                 .ToList();
 
-            return Ok(cinemas); 
+            var cinemasClient = _mapper.Map<List<CinemaClient>>(cinemas);
+
+            return Ok(cinemasClient); 
         }
 
         [HttpGet("{id}")]
@@ -36,7 +42,9 @@ namespace CinemasAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(cinemas);
+            var cinemasClient = _mapper.Map<CinemaClient>(cinemas);
+
+            return Ok(cinemasClient);
         }
     }
 }
