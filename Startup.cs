@@ -1,6 +1,7 @@
 using AutoMapper;
 using CinemaAPI;
 using CinemasAPI.Entities;
+using CinemasAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +34,7 @@ namespace CinemasAPI
             services.AddDbContext<CinemaDbContext>();
             services.AddScoped<CinemaDataSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
+            services.AddScoped<ICinemaService, CinemaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

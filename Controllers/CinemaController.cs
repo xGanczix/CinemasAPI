@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CinemasAPI.Entities;
 using CinemasAPI.Models;
+using CinemasAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -11,34 +12,24 @@ namespace CinemasAPI.Controllers
     [Route("api/cinema")]
     public class CinemaController : ControllerBase
     {
-        private readonly CinemaDbContext _dbContext;
-        private readonly IMapper _mapper;
-        public CinemaController(CinemaDbContext dbContext, IMapper mapper)
+        private readonly ICinemaService _cinemaService;
+        public CinemaController(ICinemaService cinemaService)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _cinemaService = cinemaService;
         }
 
         [HttpPost]
         public ActionResult CreateCinema([FromBody] CreateCinemaClient client)
         {
-            var cinema = _mapper.Map<Cinema>(client);
-            _dbContext.Cinemas.Add(cinema);
-            _dbContext.SaveChanges();
+            var id = _cinemaService.Create(client);
 
-            return Created($"/api/cinema/{cinema.Id}", null);
+            return Created($"/api/cinema/{id}", null);
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<CinemaClient>> GetAll()
         {
-            var cinemas = _dbContext
-                .Cinemas
-                .Include(c => c.Address)
-                .Include(c => c.Films)
-                .ToList();
-
-            var cinemasClient = _mapper.Map<List<CinemaClient>>(cinemas);
+            var cinemasClient = _cinemaService.GetAll();
 
             return Ok(cinemasClient); 
         }
@@ -46,20 +37,14 @@ namespace CinemasAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<Cinema> Get([FromRoute] int id)
         {
-            var cinemas = _dbContext
-                .Cinemas
-                .Include(c => c.Address)
-                .Include(c => c.Films)
-                .FirstOrDefault(c => c.Id == id);
+            var cinemas = _cinemaService.GetById(id);
 
             if (cinemas is null)
             {
                 return NotFound();
             }
 
-            var cinemasClient = _mapper.Map<CinemaClient>(cinemas);
-
-            return Ok(cinemasClient);
+            return Ok(cinemas);
         }
     }
 }
