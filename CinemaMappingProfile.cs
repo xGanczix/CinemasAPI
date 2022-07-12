@@ -14,6 +14,10 @@ namespace CinemasAPI
                 .ForMember(m => m.PostalCode, c => c.MapFrom(s => s.Address.PostalCode));
 
             CreateMap<Film, FilmClient>();
+
+            CreateMap<CreateCinemaClient, Cinema>()
+                .ForMember(c => c.Address, c => c.MapFrom(client => new Address()
+                    { City = client.City, Street = client.Street, PostalCode = client.PostalCode }));
         }
     }
 }

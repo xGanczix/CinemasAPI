@@ -19,6 +19,16 @@ namespace CinemasAPI.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost]
+        public ActionResult CreateCinema([FromBody] CreateCinemaClient client)
+        {
+            var cinema = _mapper.Map<Cinema>(client);
+            _dbContext.Cinemas.Add(cinema);
+            _dbContext.SaveChanges();
+
+            return Created($"/api/cinema/{cinema.Id}", null);
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<CinemaClient>> GetAll()
         {
