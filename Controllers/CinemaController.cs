@@ -24,6 +24,19 @@ namespace CinemasAPI.Controllers
             return Ok(cinemas); 
         }
 
-        
+        [HttpGet("{id}")]
+        public ActionResult<Cinema> Get([FromRoute] int id)
+        {
+            var cinemas = _dbContext
+                .Cinemas
+                .FirstOrDefault(c => c.Id == id);
+
+            if (cinemas is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(cinemas);
+        }
     }
 }
