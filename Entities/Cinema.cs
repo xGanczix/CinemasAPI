@@ -1,4 +1,6 @@
-﻿namespace CinemasAPI.Entities
+﻿using System.Collections.Generic;
+
+namespace CinemasAPI.Entities
 {
     public class Cinema
     {
