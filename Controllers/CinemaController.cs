@@ -2,6 +2,7 @@
 using CinemasAPI.Entities;
 using CinemasAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,6 +24,8 @@ namespace CinemasAPI.Controllers
         {
             var cinemas = _dbContext
                 .Cinemas
+                .Include(c => c.Address)
+                .Include(c => c.Films)
                 .ToList();
 
             var cinemasClient = _mapper.Map<List<CinemaClient>>(cinemas);
@@ -35,6 +38,8 @@ namespace CinemasAPI.Controllers
         {
             var cinemas = _dbContext
                 .Cinemas
+                .Include(c => c.Address)
+                .Include(c => c.Films)
                 .FirstOrDefault(c => c.Id == id);
 
             if (cinemas is null)
