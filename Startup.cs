@@ -1,7 +1,11 @@
 using AutoMapper;
 using CinemaAPI;
 using CinemasAPI.Entities;
+using CinemasAPI.Models;
+using CinemasAPI.Models.Validators;
 using CinemasAPI.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,7 +35,7 @@ namespace CinemasAPI
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddDbContext<CinemaDbContext>();
             services.AddScoped<CinemaDataSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
@@ -39,6 +43,7 @@ namespace CinemasAPI
             services.AddSwaggerGen();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<IValidator<RegisterUserClient>, RegisterUserClientValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
