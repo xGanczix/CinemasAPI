@@ -36,6 +36,7 @@ namespace CinemasAPI
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<ICinemaService, CinemaService>();
             services.AddSwaggerGen();
+            services.AddScoped<IAccountService, AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
