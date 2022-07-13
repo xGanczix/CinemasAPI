@@ -5,6 +5,7 @@ using CinemasAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +38,7 @@ namespace CinemasAPI
             services.AddScoped<ICinemaService, CinemaService>();
             services.AddSwaggerGen();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

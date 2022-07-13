@@ -1,5 +1,6 @@
 ﻿using CinemasAPI.Entities;
 using CinemasAPI.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CinemasAPI.Services
 {
@@ -10,9 +11,11 @@ namespace CinemasAPI.Services
     public class AccountService : IAccountService
     {
         private readonly CinemaDbContext _context;
-        public AccountService(CinemaDbContext context)
+        private readonly IPasswordHasher<User> _passwordHasher;
+        public AccountService(CinemaDbContext context, IPasswordHasher<User> passwordHasher)
         { 
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         public void RegisterUser(RegisterUserClient client)
@@ -25,6 +28,10 @@ namespace CinemasAPI.Services
                 RoleId = client.RoleId,
             };
 
+
+            var hashedPassword = _passwordHasher.HashPassword(newUser, client.Password);
+
+            newUser.PasswordHash = hashedPassword;
             _context.Users.Add(newUser);
             _context.SaveChanges();
         }
