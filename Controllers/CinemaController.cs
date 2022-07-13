@@ -16,46 +16,8 @@ namespace CinemasAPI.Controllers
         public CinemaController(ICinemaService cinemaService)
         {
             _cinemaService = cinemaService;
-        }
-
-        [HttpPut("{id}")]
-        public ActionResult Update([FromBody] UpdateCinemaClient client, [FromRoute] int id)
-        {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var isUpdated = _cinemaService.Update(id, client);
-            if(!isUpdated)
-            {
-                return NotFound();
-            }
-
-            return  Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] int id)
-        {
-            var isDeleted = _cinemaService.Delete(id);
-
-            if(isDeleted)
-            {
-                return NoContent();
-            }
-
-            return NotFound();
-        }
-
-        [HttpPost]
-        public ActionResult CreateCinema([FromBody] CreateCinemaClient client)
-        {
-            var id = _cinemaService.Create(client);
-
-            return Created($"/api/cinema/{id}", null);
-        }
-
+        }      
+                
         [HttpGet]
         public ActionResult<IEnumerable<CinemaClient>> GetAll()
         {
@@ -75,6 +37,44 @@ namespace CinemasAPI.Controllers
             }
 
             return Ok(cinemas);
+        }
+
+        [HttpPost]
+        public ActionResult CreateCinema([FromBody] CreateCinemaClient client)
+        {
+            var id = _cinemaService.Create(client);
+
+            return Created($"/api/cinema/{id}", null);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            var isDeleted = _cinemaService.Delete(id);
+
+            if (isDeleted)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult Update([FromBody] UpdateCinemaClient client, [FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var isUpdated = _cinemaService.Update(id, client);
+            if (!isUpdated)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
     }
 }
