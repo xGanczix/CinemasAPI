@@ -1,6 +1,7 @@
 using AutoMapper;
 using CinemaAPI;
 using CinemasAPI.Entities;
+using CinemasAPI.Middleware;
 using CinemasAPI.Models;
 using CinemasAPI.Models.Validators;
 using CinemasAPI.Services;
@@ -40,6 +41,7 @@ namespace CinemasAPI
 
             Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
+            services.AddSingleton(authenticationSettings);
             services.AddAuthentication(option =>
             {
                 option.DefaultAuthenticateScheme = "Bearer";
@@ -66,6 +68,7 @@ namespace CinemasAPI
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IValidator<RegisterUserClient>, RegisterUserClientValidator>();
+            services.AddScoped<ErrorHandlingMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,6 +79,8 @@ namespace CinemasAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseAuthentication();
 

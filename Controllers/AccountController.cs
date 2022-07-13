@@ -21,5 +21,12 @@ namespace CinemasAPI.Controllers
 
             return Ok();
         }
+
+        [HttpPost("login")]
+        public ActionResult Login([FromBody] LoginClient client)
+        {
+            string token = _accountService.GenerateJwt(client);
+            return Ok(token);
+        }
     }
 }
