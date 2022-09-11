@@ -2,6 +2,7 @@
 using CinemasAPI.Entities;
 using CinemasAPI.Models;
 using CinemasAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ using System.Linq;
 namespace CinemasAPI.Controllers
 {
     [Route("api/cinema")]
+    [ApiController]
+    [Authorize]
     public class CinemaController : ControllerBase
     {
         private readonly ICinemaService _cinemaService;

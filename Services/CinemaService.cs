@@ -2,6 +2,7 @@
 using CinemasAPI.Entities;
 using CinemasAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,10 +21,12 @@ namespace CinemasAPI.Services
     {
         private readonly CinemaDbContext _dbContext;
         private readonly IMapper _mapper;
-        public CinemaService(CinemaDbContext dbContext, IMapper mapper)
+        private readonly ILogger _logger;
+        public CinemaService(CinemaDbContext dbContext, IMapper mapper, ILogger<CinemaService> logger)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _logger = logger;
         }
         
         public CinemaClient GetById(int id)
@@ -67,6 +70,7 @@ namespace CinemasAPI.Services
 
         public bool Delete(int id)
         {
+            _logger.LogWarning($"Cinemas with id: {id} was DELETED");
             var cinemas = _dbContext
                 .Cinemas
                 .FirstOrDefault(c => c.Id == id);
